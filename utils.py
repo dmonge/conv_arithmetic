@@ -1,6 +1,5 @@
 """Util functions."""
 import matplotlib.pyplot as plt
-import streamlit as st
 
 import numpy as np
 import torch
@@ -23,12 +22,20 @@ def generate_kernel(kernel_size: int):
     return np.random.random((kernel_size, kernel_size))
 
 
-def compute_output(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
+def apply_convolution(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
     input = np.nan_to_num(input)
     with torch.no_grad():
         conv = nn.Conv2d(1, 1, kernel_size=kernel.shape, stride=stride, bias=False)
         conv.weight = nn.Parameter(torch.Tensor(kernel[None, None, :, :]))
         output = conv(torch.Tensor(input[None, None, :, :]))
+        return output.numpy()[0][0]
+
+
+def apply_pooling(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
+    input = np.nan_to_num(input)
+    with torch.no_grad():
+        pool = nn.AvgPool2d(kernel.shape, stride=stride)
+        output = pool(torch.Tensor(input[None, None, :, :]))
         return output.numpy()[0][0]
 
 

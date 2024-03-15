@@ -1,11 +1,10 @@
-"""Streamlit page for exploring convolution arithmetic."""
+"""Streamlit page for exploring pooling arithmetic."""
 import streamlit as st
 
 import numpy as np
 
 from utils import generate_input
-from utils import generate_kernel
-from utils import apply_convolution
+from utils import apply_pooling
 from utils import plot_array
 
 
@@ -23,14 +22,14 @@ def render_controls():
 
 
 def main():
-    st.title('Convolution arithmetic')
+    st.title('Pooling arithmetic')
 
     st.markdown('Given:')
     st.markdown(' - an input array with size _i_,')
     st.markdown(' - which has been padded with _p_ rows/columns,')
-    st.markdown(' - a convolution kernel with size _k_,')
+    st.markdown(' - a pooling kernel with size _k_,')
     st.markdown(' - applied with stride _s_,')
-    st.markdown('then, the size of the convolution output, _o_, is:')
+    st.markdown('then, the size of the pooling output, _o_, is:')
     st.latex(r'o = \left\lfloor (i + p - k) / s \right\rfloor + 1')
 
     # controls
@@ -39,20 +38,20 @@ def main():
 
     # data
     input = generate_input(input_size, padding=padding)
-    kernel = generate_kernel(kernel_size)
-    output = apply_convolution(input, kernel, stride)
+    kernel = np.full((kernel_size, kernel_size), np.nan)
+    output = apply_pooling(input, kernel, stride)
     vmin = min(np.nanmin(input), np.min(kernel), np.min(output))
     vmax = max(np.nanmax(input), np.max(kernel), np.max(output))
     st.info(f'Output size: {_compute_output_size(input_size, padding, kernel_size, stride)}')
 
     # plots
-    st.subheader('Convolution')
+    st.subheader('Pooling (mean)')
     c1, c2, c3 = st.columns([1, 1, 1])
 
     c1.text('Input')
     c1.pyplot(plot_array(input, vmin=vmin, vmax=vmax))
 
-    c2.text('Kernel')
+    c2.text('Kernel (shape only)')
     c2.pyplot(plot_array(kernel, vmin=vmin, vmax=vmax))
 
     c3.text('Output')
