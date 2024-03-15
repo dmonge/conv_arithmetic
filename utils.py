@@ -32,7 +32,7 @@ def compute_output(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
         return output.numpy()[0][0]
 
 
-def plot_array(array: np.ndarray, container: st.container = st, vmin: float = None, vmax: float = None):
+def plot_array(array: np.ndarray, vmin: float = None, vmax: float = None):
     fig = plt.figure()
     plt.imshow(array, cmap='viridis', vmin=vmin, vmax=vmax)
     plt.gcf().set_facecolor('gray')
@@ -42,6 +42,6 @@ def plot_array(array: np.ndarray, container: st.container = st, vmin: float = No
     ax = plt.gca()
     ax.set_xticks(np.arange(-0.5, array.shape[0]-0.5, 1))
     ax.set_yticks(np.arange(-0.5, array.shape[0]-0.5, 1))
-    ax.grid(color='gray', linestyle='-', linewidth=3)
+    ax.grid(color='gray', linestyle='-', linewidth=1)
     plt.tight_layout()
     return fig
