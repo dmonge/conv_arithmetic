@@ -30,6 +30,15 @@ def apply_convolution(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
         return output.numpy()[0][0]
 
 
+def apply_transposed_convolution(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
+    input = np.nan_to_num(input)
+    with torch.no_grad():
+        conv = nn.ConvTranspose2d(1, 1, kernel_size=kernel.shape, stride=stride, bias=False)
+        conv.weight = nn.Parameter(torch.Tensor(kernel[None, None, :, :]))
+        output = conv(torch.Tensor(input[None, None, :, :]))
+        return output.numpy()[0][0]
+
+
 def apply_pooling(input: np.ndarray, kernel: np.ndarray, stride: int = 1):
     input = np.nan_to_num(input)
     with torch.no_grad():
