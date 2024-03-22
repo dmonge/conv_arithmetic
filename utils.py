@@ -9,7 +9,6 @@ from torch import nn
 def generate_input(input_size: int, padding: int = 0):
     if padding > 0:
         input = np.full((input_size + padding, input_size + padding), np.nan)
-        # input[:, :] = np.nan
         offset = padding // 2
         input[offset:offset + input_size, offset:offset + input_size] = \
             np.random.random((input_size, input_size))
